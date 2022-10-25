@@ -24,10 +24,11 @@ const
     const Movies = Models.Movie;
     const Users = Models.User;
 
+
     const passport = require('passport');
     require('./passport');    
+    let auth = require('./auth')(app);
 
-let auth = require('./auth')(app);
 
 
 //Setting up the connection with the Mongo databse
@@ -88,7 +89,7 @@ app.get('/movies/Director/:Name', passport.authenticate('jwt', { session: false 
 
 
 //Add a new user
-app.post('/users', passport.authenticate('jwt', { session: false }),(req, res) => {
+app.post('/users', (req, res) => {
     Users.findOne({Username: req.body.Username})
     .then((user) => {
         if (user) {
