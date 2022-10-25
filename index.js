@@ -6,6 +6,7 @@ const
     fs = require('fs');
     path = require('path')
     http = require('http')
+  
 
 
 //Setting the functions
@@ -24,7 +25,7 @@ const
     const Users = Models.User;
 
     const passport = require('passport');
-    require('./passport');
+    require('./passport');    
 
 let auth = require('./auth')(app);
 
@@ -38,7 +39,7 @@ app.get('/', (req, res) => {
     res.send('Welcome to the shyFlix movieDex');
 });    
 //Return a list of movies
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }),(req, res) => {
     Movies.find()
     .then((movies) => {
         res.status(200).json(movies);
@@ -50,7 +51,7 @@ app.get('/movies', (req, res) => {
 });
 
 //Get movie by title
-app.get('/movies/:Title', (req, res) => {
+app.get('/movies/:Title', passport.authenticate('jwt', { session: false }),(req, res) => {
     Movies.findOne({Title: req.params.Title})
     .then((movie) => {
         res.status(200).json(movie);
@@ -62,7 +63,7 @@ app.get('/movies/:Title', (req, res) => {
 });
 
 //Get genre my name
-app.get('/movies/genre/:Name', (req, res) => {
+app.get('/movies/genre/:Name', passport.authenticate('jwt', { session: false }),(req, res) => {
     Movies.findOne({ 'Genre.Name': req.params.Name})
     .then((movies) => {
         res.send(movies.Genre);
@@ -74,7 +75,7 @@ app.get('/movies/genre/:Name', (req, res) => {
 });
 
 //get director data
-app.get('/movies/Director/:Name', (req, res) => {
+app.get('/movies/Director/:Name', passport.authenticate('jwt', { session: false }),(req, res) => {
     Movies.findOne({ 'Director.Name': req.params.Name})
     .then((movies) => {
         res.send(movies.Director);
@@ -87,7 +88,7 @@ app.get('/movies/Director/:Name', (req, res) => {
 
 
 //Add a new user
-app.post('/users', (req, res) => {
+app.post('/users', passport.authenticate('jwt', { session: false }),(req, res) => {
     Users.findOne({Username: req.body.Username})
     .then((user) => {
         if (user) {
