@@ -7,21 +7,31 @@ const
     path = require('path')
     http = require('http')
 
+
 //Setting the functions
     const app = express();
     const mongoose = require('mongoose');
     const Models = require('./models.js');
+    
     const {check, validateResults } = require('express-validator');
-const { error } = require('console');
+    
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
+
 
 //Applying the models
     const Movies = Models.Movie;
     const Users = Models.User;
 
+    const passport = require('passport');
+    require('./passport');
+
+let auth = require('./auth')(app);
+
+
 //Setting up the connection with the Mongo databse
 mongoose.connect('mongodb://localhost:27017/shyFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: true}));
+
 
 //Welcome text
 app.get('/', (req, res) => {
@@ -102,3 +112,5 @@ app.post('/users', (req, res) => {
         res.status(500).send('Error' + error);
     });
 });
+
+app.listen(8080, () => console.log('Listening on port 8080'))
