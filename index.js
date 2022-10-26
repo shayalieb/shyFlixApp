@@ -1,12 +1,13 @@
 const 
     express = require('express');
+    const { check, validationresult } = require('express-validator')
     morgan = require('morgan');
     bodyParser = require('body-parser');
     uuid = require('uuid');
     fs = require('fs');
     path = require('path')
     http = require('http')
-  
+    
 
 
 //Setting the functions
@@ -24,6 +25,23 @@ const
     const Movies = Models.Movie;
     const Users = Models.User;
 
+//CORS Confiuration
+const  cors = require('cors');
+app.use(cors());
+
+//Allwing origins
+let allowedOrgigins = ['http://localhost:8080', 'https://shayalieberman.com'];
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if(!origin) return callback(null, true);
+        if(allowedOrgigins.indexOf(origin) === -1){
+            let message = 'Due to CORS policy for shyFlixApp access from origin is not allowed! ' + orogin;
+            return callback(new Error(message), false);
+        }
+        return callback(null, true);
+    }
+}));
 
     const passport = require('passport');
     require('./passport');    
@@ -90,6 +108,19 @@ app.get('/movies/Director/:Name', passport.authenticate('jwt', { session: false 
 
 //Add a new user
 app.post('/users', (req, res) => {
+    [
+    check('Username', 'Username is required').isLength({min: 6}), //the valication logic
+    check('Username', 'Username contains non-alphanumric characters - not allowed' ).isAlphanumeric,//validation method
+    check('Password', 'Password is required').not().isEmpty,//password must  be filled in
+    check('Email', 'Invalid email address').isEmail()
+    ], (req, res) => {
+        //check for validation errors
+        let errors = validateResults(req);
+        if(!errors.isEmpty()) {
+            return res.status(422).json({errors: errors.array ()});
+        }
+    }
+    let hashPassword = Users.hashPassword(req.body.Password);//hash any password weh regiterting before storing it
     Users.findOne({Username: req.body.Username})
     .then((user) => {
         if (user) {
@@ -168,5 +199,7 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }),(re
      });
 });   
 
-//When app is running it is listening on port 8080
-app.listen(8080, () => console.log('Listening on port 8080'))
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0', () => {
+    console.log('Listening on port' + port)
+});

@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+//importing the encryption function
+const bcrypt = require('bcrypt');
 
 //Configring the movies database schema
 //Data tpyes are: String and Boolean
@@ -27,6 +29,14 @@ let userSchema = mongoose.Schema({
     DOB: Date,
     FavoriteMoveis: [{type: mongoose.Schema.Types.ObjectId, ref: 'Movie'}]
 });
+//Enabling hashing for better password security
+userSchema.statics.hashPassword = (Password) => {
+    return bcrypt.hashSync(Password, 10);
+};
+userSchema.methods.validatePassword = function(password) {
+    return bcrypt.compareSync(password, this.password);
+};
+
 
 //Creating the models 
 let Movie = mongoose.model('Movie', movieSchema);
@@ -35,3 +45,4 @@ let User = mongoose.model('User', userSchema);
 //Exports the moodals to create/join the databas of the shyFilx app
 module.exports.Movie = Movie;
 module.exports.User = User;
+
