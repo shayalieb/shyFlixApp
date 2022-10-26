@@ -19,7 +19,7 @@ passport.use(new LocalStrategy({
             return callback(error);
         }
         if (!user) {
-            console.log('The username is incorrect');
+            console.log(' username is incorrect');
             return callback(null, false, {message: 'Incorrect username or password.'});
         }
         console.log('finished')
@@ -29,7 +29,7 @@ passport.use(new LocalStrategy({
 
 passport.use(new JWTStrategy({
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-    secretOrKey: 'you_jwt_secret'
+    secretOrKey: 'your_jwt_secret'
     }, (jwtPayload, callback) => {
         return Users.findById(jwtPayload._id)
         .then((user) => {
