@@ -115,4 +115,58 @@ app.post('/users', (req, res) => {
     });
 });
 
+//Add a movie to user favorites
+app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }),(req, res) => {
+    Users.findOneAndUpdate({ Username: req.params.Username}, { $push: 
+        { FavoriteMoveis: req.params.MovieID }
+     },
+     { new: true }, 
+     (err, updateUser ) => {
+        if(err) {
+            console.error(err);
+            res.status(500).send('Error' + err);
+        } else {
+            res.json(updateUser);
+        }
+     });
+});  
+
+//Delete a user by username
+app.delete('/users/:Username', passport.authenticate('jwt', { session: false }),(req, res) => {
+    Users.findOneAndRemove({ Username: req.params.Username})
+    .then((user) => {
+        if(!user) {
+            res.status(400).send(req.params.Username + 'The username was not found');
+        } else {
+            res.status(200).send(req.params.Username + 'The user has been deleted');
+        }
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error:' + err);
+    });
+});
+
+//Update user info
+app.put('/users/:Username', passport.authenticate('jwt', { session: false }),(req, res) => {
+    Users.findOneAndUpdate({ Username: req.params.Username}, { $set: 
+        {
+            Username: req.body.Username,
+            Password: req.body.Password,
+            Email: req.body.Email,
+            Birthday: req.body.Birthday
+        }
+     },
+     { new: true }, 
+     (err, updateUser ) => {
+        if(err) {
+            console.error(err);
+            res.status(500).send('Error' + err);
+        } else {
+            res.json(updateUser);
+        }
+     });
+});   
+
+//When app is running it is listening on port 8080
 app.listen(8080, () => console.log('Listening on port 8080'))
