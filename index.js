@@ -15,7 +15,7 @@ const
     const mongoose = require('mongoose');
     const Models = require('./models.js');
     
-    const {check, validateResults } = require('express-validator');
+
     
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
