@@ -16,7 +16,7 @@ const
     const mongoose = require('mongoose');
     const Models = require('./models.js');
     
-
+    // mongoose.connect('mongodb://localhost:27017/myapp')
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 let allowedOrgigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com/'];
     
