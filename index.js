@@ -49,9 +49,11 @@ app.use(cors({
 
 
 
-//Setting up the connection with the Mongo databse
-mongoose.connect('mongodb://localhost:27017/shyFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
-
+//Setting up the connection with the Mongo LOCAL databse 
+// mongoose.connect('mongodb://localhost:27017/dbname', { useNewUrlParser: true, useUnifiedTopology: true });
+//setting up the connection to the REMOTE database
+mongoose.connect('process.env.CONNECTION_URI', { useNewUrlParser: true, useUnifiedTopology: true });
+//mongodb+srv://shayalieberman:%40MEtoo724@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority
 
 //Welcome text
 app.get('/', (req, res) => {
