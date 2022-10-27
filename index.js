@@ -7,7 +7,8 @@ const
     fs = require('fs');
     path = require('path')
     http = require('http')
- 
+
+    const dotenv = require('dotenv').config();
 
 
 //Setting the functions
@@ -15,10 +16,9 @@ const
     const mongoose = require('mongoose');
     const Models = require('./models.js');
     
-    mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-//Allwing origins
-
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+let allowedOrgigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com/'];
     
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
@@ -32,7 +32,7 @@ const
 const  cors = require('cors');
 app.use(cors());
 
-let allowedOrgigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com'];
+
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -45,17 +45,11 @@ app.use(cors({
     }
 }));
 
+    let auth = require('./auth')(app);
     const passport = require('passport');
     require('./passport');    
-    let auth = require('./auth')(app);
-
-//setting up the connection to the REMOTE database
 
 
-// mongoose.connect('mongodb://localhost:27017/dbname', { useNewUrlParser: true, useUnifiedTopology: true });
-
-
-//mongoose.connect('mongodb://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
 
 //Welcome text
 app.get('/', (req, res) => {
