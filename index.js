@@ -7,7 +7,7 @@ const
     fs = require('fs');
     path = require('path')
     http = require('http')
-    
+ 
 
 
 //Setting the functions
@@ -15,6 +15,9 @@ const
     const mongoose = require('mongoose');
     const Models = require('./models.js');
     
+    mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+//Allwing origins
 
     
     app.use(bodyParser.json());
@@ -29,8 +32,7 @@ const
 const  cors = require('cors');
 app.use(cors());
 
-//Allwing origins
-let allowedOrgigins = ['http://localhost:8080', 'https://shayalieberman.com'];
+let allowedOrgigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com'];
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -47,13 +49,13 @@ app.use(cors({
     require('./passport');    
     let auth = require('./auth')(app);
 
-
-
-//Setting up the connection with the Mongo LOCAL databse 
-// mongoose.connect('mongodb://localhost:27017/dbname', { useNewUrlParser: true, useUnifiedTopology: true });
 //setting up the connection to the REMOTE database
-mongoose.connect('mongodb://process.env.CONNECTION_URI', { useNewUrlParser: true, useUnifiedTopology: true });
-//mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority
+
+
+// mongoose.connect('mongodb://localhost:27017/dbname', { useNewUrlParser: true, useUnifiedTopology: true });
+
+
+//mongoose.connect('mongodb://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
 
 //Welcome text
 app.get('/', (req, res) => {
