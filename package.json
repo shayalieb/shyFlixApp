@@ -31,5 +31,13 @@
   "devDependencies": {
     "eslint": "^8.26.0",
     "nodemon": "^2.0.20"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shayalieb/shyFlixApp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shayalieb/shyFlixApp/issues"
+  },
+  "homepage": "https://github.com/shayalieb/shyFlixApp#readme"
 }
