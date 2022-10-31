@@ -8,13 +8,15 @@ const
     path = require('path')
     http = require('http')
 
-    const dotenv = require('dotenv').config();
 
 
 //Setting the functions
     const app = express();
     const mongoose = require('mongoose');
     const Models = require('./models.js');
+    // const dotenv = require('dotenv').config();
+    // app.use(dotenv)
+    const CONNECTION_URI = new mongoose.Connection(process.env.CONNECTION_URI);
     
     mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
     // mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });    
@@ -200,6 +202,6 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }),(re
 });   
 
 const port = process.env.PORT || 8080;
-app.listen(port, '0.0.0.0', () => {
-    console.log('Listening on port' + port)
+app.listen(port, '0.0.0.0',() => {
+ console.log('Listening on Port ' + port);
 });
