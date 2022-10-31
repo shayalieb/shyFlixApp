@@ -19,11 +19,12 @@ const
     // app.use(dotenv)
 
     
-    mongoose.connect(access.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-    // mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });    
+    mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    let allowedOrgigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com/'];
+    //mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });    
     //mongoose.connect('mongodb://localhost:27017/myapp')
-// mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-let allowedOrgigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com/'];
+//mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
     
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
@@ -52,7 +53,7 @@ app.use(cors({
 
     let auth = require('./auth')(app);
     const passport = require('passport');
-const { access } = require('fs');
+    const { access } = require('fs');
     require('./passport');    
 
 
@@ -124,7 +125,7 @@ app.post('/users', (req, res) => {
             return res.status(422).json({errors: errors.array ()});
         }
     }
-    let hashPassword = Users.hashPassword(req.body.Password);//hash any password weh regiterting before storing it
+    let hashedPassword = Users.hashPassword(req.body.Password);//hash any password weh regiterting before storing it
     Users.findOne({Username: req.body.Username})
     .then((user) => {
         if (user) {
