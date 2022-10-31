@@ -7,7 +7,8 @@ const
     fs = require('fs');
     path = require('path')
     http = require('http')
-
+    dotenv = require('dotenv');
+    dotenv.config();
 
 
 //Setting the functions
@@ -16,9 +17,9 @@ const
     const Models = require('./models.js');
     // const dotenv = require('dotenv').config();
     // app.use(dotenv)
-    const CONNECTION_URI = new mongoose.Connection(process.env.CONNECTION_URI);
+
     
-    mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    mongoose.connect(access.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
     // mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });    
     //mongoose.connect('mongodb://localhost:27017/myapp')
 // mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -51,6 +52,7 @@ app.use(cors({
 
     let auth = require('./auth')(app);
     const passport = require('passport');
+const { access } = require('fs');
     require('./passport');    
 
 
