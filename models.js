@@ -23,20 +23,20 @@ let movieSchema = mongoose.Schema({
 //Configuring the users stabase schema
 //Data types are: String, Boolean, and Date
 let userSchema = mongoose.Schema({
-    Username: {type: String, required: true},
-    Password: {type: String, required: true},
-    Email: {type: String, required: true},
-    DOB: Date,
+    username: {type: String, required: true},
+    password: {type: String, required: true},
+    email: {type: String, required: true},
+    birthday: Date,
     FavoriteMoveis: [{type: mongoose.Schema.Types.ObjectId, ref: 'Movie'}]
 });
 //Enabling hashing for better password security
 userSchema.statics.hashPassword = (password) => {
     return bcrypt.hashSync(password, 10);
 };
-userSchema.methods.validatePassword = function(password) {
+
+userSchema.methods.validatePassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };
-
 
 //Creating the models 
 let Movie = mongoose.model('Movie', movieSchema);
