@@ -30,8 +30,8 @@ let userSchema = mongoose.Schema({
     FavoriteMoveis: [{type: mongoose.Schema.Types.ObjectId, ref: 'Movie'}]
 });
 //Enabling hashing for better password security
-userSchema.statics.hashPassword = (Password) => {
-    return bcrypt.hashSync(Password, 10);
+userSchema.statics.hashPassword = (password) => {
+    return bcrypt.hashSync(password, 10);
 };
 userSchema.methods.validatePassword = function(password) {
     return bcrypt.compareSync(password, this.password);

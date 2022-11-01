@@ -1,7 +1,6 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
-import express from 'express';
-    import { check, validationresult } from 'express-validator';
+const 
+    express = require('express');
+    const { check, validationresult } = require('express-validator')
     morgan = require('morgan');
     bodyParser = require('body-parser');
     uuid = require('uuid');
@@ -14,13 +13,13 @@ import express from 'express';
 
 //Setting the functions
     const app = express();
-    import { connect } from 'mongoose';
-    import { Movie, User } from './models.js';
+    const mongoose = require('mongoose');
+    const Models = require('./models.js');
     // const dotenv = require('dotenv').config();
     // app.use(dotenv)
 
     
-    connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
     let allowedOrgigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com/'];
     //mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });    
     //mongoose.connect('mongodb://localhost:27017/myapp')
@@ -32,11 +31,11 @@ import express from 'express';
 
 
 //Applying the models
-    const Movies = Movie;
-    const Users = User;
+    const Movies = Models.Movie;
+    const Users = Models.User;
 
 //CORS Confiuration
-import cors from 'cors';
+const  cors = require('cors');
 app.use(cors());
 
 
@@ -53,9 +52,9 @@ app.use(cors({
 }));
 
     let auth = require('./auth')(app);
-    import { authenticate } from 'passport';
-    import { access } from 'fs';
-    import './passport';    
+    const passport = require('passport');
+    const { access } = require('fs');
+    require('./passport');    
 
 
 
@@ -64,7 +63,7 @@ app.get('/', (req, res) => {
     res.send('Welcome to the shyFlix movieDex');
 });    
 //Return a list of movies
-app.get('/movies', authenticate('jwt', { session: false }),(req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }),(req, res) => {
     Movies.find()
     .then((movies) => {
         res.status(200).json(movies);
@@ -76,7 +75,7 @@ app.get('/movies', authenticate('jwt', { session: false }),(req, res) => {
 });
 
 //Get movie by title
-app.get('/movies/:Title', authenticate('jwt', { session: false }),(req, res) => {
+app.get('/movies/:Title', passport.authenticate('jwt', { session: false }),(req, res) => {
     Movies.findOne({Title: req.params.Title})
     .then((movie) => {
         res.status(200).json(movie);
@@ -88,7 +87,7 @@ app.get('/movies/:Title', authenticate('jwt', { session: false }),(req, res) => 
 });
 
 //Get genre my name
-app.get('/movies/genre/:Name', authenticate('jwt', { session: false }),(req, res) => {
+app.get('/movies/genre/:Name', passport.authenticate('jwt', { session: false }),(req, res) => {
     Movies.findOne({ 'Genre.Name': req.params.Name})
     .then((movies) => {
         res.send(movies.Genre);
@@ -100,7 +99,7 @@ app.get('/movies/genre/:Name', authenticate('jwt', { session: false }),(req, res
 });
 
 //get director data
-app.get('/movies/Director/:Name', authenticate('jwt', { session: false }),(req, res) => {
+app.get('/movies/Director/:Name', passport.authenticate('jwt', { session: false }),(req, res) => {
     Movies.findOne({ 'Director.Name': req.params.Name})
     .then((movies) => {
         res.send(movies.Director);
@@ -153,7 +152,7 @@ app.post('/users', (req, res) => {
 });
 
 //Add a movie to user favorites
-app.post('/users/:Username/movies/:MovieID', authenticate('jwt', { session: false }),(req, res) => {
+app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }),(req, res) => {
     Users.findOneAndUpdate({ Username: req.params.Username}, { $push: 
         { FavoriteMoveis: req.params.MovieID }
      },
@@ -169,7 +168,7 @@ app.post('/users/:Username/movies/:MovieID', authenticate('jwt', { session: fals
 });  
 
 //Delete a user by username
-app.delete('/users/:Username', authenticate('jwt', { session: false }),(req, res) => {
+app.delete('/users/:Username', passport.authenticate('jwt', { session: false }),(req, res) => {
     Users.findOneAndRemove({ Username: req.params.Username})
     .then((user) => {
         if(!user) {
@@ -185,7 +184,7 @@ app.delete('/users/:Username', authenticate('jwt', { session: false }),(req, res
 });
 
 //Update user info
-app.put('/users/:Username', authenticate('jwt', { session: false }),(req, res) => {
+app.put('/users/:Username', passport.authenticate('jwt', { session: false }),(req, res) => {
     Users.findOneAndUpdate({ Username: req.params.Username}, { $set: 
         {
             Username: req.body.Username,
