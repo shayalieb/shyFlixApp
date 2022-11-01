@@ -2,8 +2,6 @@ const mongoose = require('mongoose');
 //importing the encryption function
 const bcrypt = require('bcrypt');
 
-const mongosh = require('mongosh')
-
 //Configring the movies database schema
 //Data tpyes are: String and Boolean
 let movieSchema = mongoose.Schema({
