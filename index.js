@@ -120,7 +120,7 @@ app.post('/users', (req, res) => {
     check('Email', 'Invalid email address').isEmail()
     ], (req, res) => {
         //check for validation errors
-        let errors = validateResults(req);
+        let errors = validationresult(req);
         if(!errors.isEmpty()) {
             return res.status(422).json({errors: errors.array ()});
         }
