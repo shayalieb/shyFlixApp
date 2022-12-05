@@ -8,8 +8,8 @@ const express = require('express'),
 
 const { check, validationResult } = require('express-validator');
 
-const movies = models.movie,
-    users = models.user;
+const movies = models.movies,
+    users = models.User;
 
 app.use(bodyParser.json());
 app.use(morgan('common'));
