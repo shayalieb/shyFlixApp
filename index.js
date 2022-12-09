@@ -5,6 +5,7 @@ const express = require('express'),
     morgan = require('morgan'),
     mongoose = require('mongoose'),
     models = require('./models.js')
+cors = require('cors')
 
 const { check, validationResult } = require('express-validator');
 
@@ -21,7 +22,8 @@ app.use(cors());
 
 //Import and use passport
 let auth = require('./auth.js')(app);
-const passport = require('passport')
+const passport = require('passport');
+const { access } = require('fs');
 require('./passport.js')
 
 //Connect to mongoose
@@ -29,6 +31,17 @@ mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnified
 //mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/?retryWrites=true&w=majority')
 
 let allowedOrigins = ['http://localhost:1234', 'http://localhost:8080', 'https://shyflixapp.herokuapp.com/', 'https://strong-daifuku-4e6ea6.netlify.app/'];
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            let message = 'CORS Policy for this application  does not allow for access from origin ' + origin;
+            return callback(new Error(message), false);
+        }
+        return callback(null, true)
+    }
+}));
+
 
 //Welcome message
 app.get('/', (req, res) => {
