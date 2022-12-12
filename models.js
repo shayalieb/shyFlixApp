@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const { default: mongoose } = require('mongoose');
 //importing the encryption function
 const bcrypt = require('bcrypt');
 
@@ -26,7 +26,7 @@ let userSchema = mongoose.Schema({
     Username: { type: String, required: true },
     Password: { type: String, required: true },
     Email: { type: String, required: true },
-    DOB: Date,
+    Birthday: Date,
     FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }]
 });
 //Enabling hashing for better password security
