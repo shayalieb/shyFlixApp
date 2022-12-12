@@ -3,17 +3,17 @@ bodyParser = require('body-parser');
 uuid = require('uuid');
 morgan = require('morgan');
 fs = require('fs');
-path = require('path');
+//path = require('path');
 
 const app = express();
 const mongoose = require('mongoose');
 const model = require('./models.js');
 const { check, validationResult } = require('express-validator');
 
-const movies = models.movie;
-const users = models.users;
-const genre = models.Genre;
-const directors = models.Director;
+//const movies = models.movies;
+// const users = models.users;
+// const Genre = models.Genre;
+// const Director = models.Director;
 
 //mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/?retryWrites=true&w=majority')
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });

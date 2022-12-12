@@ -2,7 +2,7 @@ const jwtSecret = 'your_jwt_secret';
 
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-passport('./passport');
+passport('./passport.');
 
 require('./passport');
 
