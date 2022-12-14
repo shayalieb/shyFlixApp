@@ -1,33 +1,37 @@
+
 const express = require('express');
 bodyParser = require('body-parser');
 uuid = require('uuid');
 morgan = require('morgan');
 fs = require('fs');
-//path = require('path');
+path = require('path');
+
 
 const app = express();
 const mongoose = require('mongoose');
 const model = require('./models.js');
 const { check, validationResult } = require('express-validator');
 
-//const movies = models.movies;
-// const users = models.users;
-// const Genre = models.Genre;
-// const Director = models.Director;
+const movies = mongoose.models.movies;
+const users = mongoose.models.users;
+const Genre = mongoose.models.Genre;
+const Director = mongoose.models.Director;
+
+app.use(express.json());
 
 //mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/?retryWrites=true&w=majority')
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 //Middleware functions
-app.use(bodyParser());
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //Will use cors as the default authenticator and by default will allow requests from all origins
 const cors = require('cors');
 
 //this will allow us to accept requests from the front end of the site
-let allowedOrigins = ['http://localhost:1234', 'http://localhost:8080', 'https://shyflixapp.herokuapp.com/'];
+let allowedOrigins = ['http://localhost:1234', 'http://localhost:8080', 'https://shyflixapp.herokuapp.com/', ''];
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -42,12 +46,12 @@ app.use(cors({
 
 //Import the auth.js file (app) is to ensure express is available in the auth.js
 //Require and import the passport.js file 
-require('./auth')(app);
+
 
 const passport = require('passport');
-const path = require('path');
-require('./passport');
 
+require('./passport.js');
+require('./auth')(app);
 //Will take the data and apply it to the logs
 const accessLogStream = fs.accessLogStream(path.join(__dirname, 'log.txt'), { flags: 'a' })
 app.use(morgan('common', { stream: accessLogStream }));
