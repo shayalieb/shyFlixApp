@@ -120,7 +120,7 @@ app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) =
 
 //GET user by username
 app.get('/users/Username', passport.authenticate('jwt', { session: false }), (req, res) => {
-    movies.findOne({ 'Users.Username': req.params.Username })
+    movies.findOne({ 'users.Username': req.params.Username })
         .then((user) => {
             res.status(200).json(user)
         })
