@@ -53,8 +53,8 @@ const passport = require('passport');
 require('./passport.js');
 require('./auth')(app);
 //Will take the data and apply it to the logs
-const accessLogStream = fs.accessLogStream(path.join(__dirname, 'log.txt'), { flags: 'a' })
-app.use(morgan('common', { stream: accessLogStream }));
+//const accessLogStream = fs.accessLogStream(path.join(__dirname, 'log.txt'), { flags: 'a' })
+//app.use(morgan('common', { stream: accessLogStream }));
 app.use(express.static('public'));
 app.get('/', (req, res) => {
     res.send('Welcome to the shyFlix Movie App')
