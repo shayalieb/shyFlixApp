@@ -15,8 +15,8 @@ const { check, validationResult } = require('express-validator');
 app.use(express.json());
 
 //mongoose.set('strictQuery', true);
-//mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/?retryWrites=true&w=majority').then(() => console.log('Connected!'));
-mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/?retryWrites=true&w=majority').then(() => console.log('Connected!'));
+//mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const cors = require('cors');
 app.use(cors());
@@ -281,6 +281,6 @@ app.use((err, req, res, next) => {
 
 //LISTENERS
 const port = process.env.PORT || 8080;
-app.listen(port, ' 0.0.0.0', () => {
+app.listen(port, '0.0.0.0', () => {
     console.log('Listening on port ' + port)
 })
