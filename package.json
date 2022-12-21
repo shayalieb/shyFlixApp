@@ -23,7 +23,7 @@
     "latest": "^0.2.0",
     "mongoimport": "^1.0.6",
     "mongoos": "^0.0.1-security",
-    "mongoose": "^6.7.0",
+    "mongoose": "^6.8.1",
     "morgan": "^1.10.0",
     "node": "^16.18.1",
     "node.js": "^0.0.1-security",

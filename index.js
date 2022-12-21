@@ -12,10 +12,14 @@ const Users = Models.User;
 
 const { check, validationResult } = require('express-validator');
 
-//app.use(express.json());
+app.use(express.json());
 
-//mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/?retryWrites=true&w=majority')
+//mongoose.set('strictQuery', true);
+//mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/?retryWrites=true&w=majority').then(() => console.log('Connected!'));
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+const cors = require('cors');
+app.use(cors());
 
 let allowedOrigins = ['http://localhost:1234', 'http://localhost:8080', 'https://shyflixapp.herokuapp.com/', ''];
 
@@ -30,16 +34,15 @@ app.use(cors({
     }
 }));
 
-const cors = require('cors');
-app.use(cors());
-
-let auth = require('./auth')(app)
-const passport = require('passport');
-app.use('./passport');
-
 app.use(bodyParser.json());
 app.use(morgan('common'));
 app.use(express.static('public'))
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+let auth = require('./auth')(app)
+const passport = require('passport');
+require('./passport.js');
 
 //GET Welcome page
 app.get('/', (req, res) => {
