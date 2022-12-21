@@ -50,7 +50,7 @@ const passport = require('passport'),
 //             console.log(' Username is incorrect');
 //             return callback(null, false, {message: 'Incorrect username'});
 //         }
-//         if (!user.validatePassword(password)) {//Hash any passwrods that are being submitted when a user logs in
+//         if (!user.validatePassword(password)) {//Hash any passwords that are being submitted when a user logs in
 //             console.log('The password is incorrect');
 //             return callback(null, false, {message: 'Incorrect password'});
 //         }
