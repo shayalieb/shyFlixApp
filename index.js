@@ -52,12 +52,6 @@ app.use(cors({
     }
 }));
 
-app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: true }
-}));
 
 app.use(passport.session());
 
