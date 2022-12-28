@@ -1,6 +1,5 @@
 const
     express = require('express');
-session = require('express-session');
 const { check, validationResult } = require('express-validator')
 morgan = require('morgan');
 bodyParser = require('body-parser');
@@ -52,8 +51,6 @@ app.use(cors({
     }
 }));
 
-
-app.use(passport.session());
 
 let auth = require('./auth')(app);
 const passport = require('passport');
