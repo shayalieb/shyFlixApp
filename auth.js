@@ -4,12 +4,21 @@ passport = require('passport');
 
 require('./passport.js');
 
-function generateJWTToken(user) {
-  return jwt.sign(user, jwtSecret, {
-    subject: user.Username,
-    expiresIn: '7d',
-    algorithm: 'HS256',
-  });
+// function generateJWTToken(user) {
+//   return jwt.sign(user, jwtSecret, {
+//     subject: user.Username,
+//     expiresIn: '7d',
+//     algorithm: 'HS256',
+//   });
+// }
+
+genToken = user => {
+  return jwt.sign({
+    iss: 'your_jwt-secret',
+    sub: user.id,
+    iat: new Date().getTime(),
+    exp: new Date().setDate(new Date().getDate() + 1)
+  }, 'your_jwt-secret');
 }
 
 //POST on login authentication
@@ -30,7 +39,7 @@ module.exports = (router) => {
           if (error) {
             res.send(error);
           }
-          let token = generateJWTToken(user.toJSON());
+          let token = genToken(user.toJSON());
           return res.json({ user, token });
         })
       }
