@@ -32,6 +32,7 @@ passport.use(new JWTStrategy({
   secretOrKey: 'your_jwt-secret'
 }, async (jwtPayload, callback) => {
   try {
+    console.log(jwtPayload)
     const user = await Users.findById(jwtPayload._id);
     return callback(null, user);
   } catch (error) {
