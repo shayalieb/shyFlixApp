@@ -15,6 +15,8 @@ dotenv.config();
 const app = express();
 const mongoose = require('mongoose');
 const Models = require('./models.js');
+const movie = Models.Movie;
+const users = Models.User
 // const dotenv = require('dotenv').config();
 // app.use(dotenv)
 
@@ -34,9 +36,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-//Applying the models
-const Movies = Models.Movie;
-const Users = Models.User;
+
+
 
 //CORS Configuration
 const cors = require('cors');
@@ -44,16 +45,16 @@ app.use(cors());
 
 
 
-app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) {
-            let message = 'Due to CORS policy for shyFlixApp access from origin is not allowed! ' + origin;
-            return callback(new Error(message), false);
-        }
-        return callback(null, true);
-    }
-}));
+// app.use(cors({
+//     origin: (origin, callback) => {
+//         if (!origin) return callback(null, true);
+//         if (allowedOrigins.indexOf(origin) === -1) {
+//             let message = 'Due to CORS policy for shyFlixApp access from origin is not allowed! ' + origin;
+//             return callback(new Error(message), false);
+//         }
+//         return callback(null, true);
+//     }
+// }));
 
 
 let auth = require('./auth')(app);
