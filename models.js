@@ -39,8 +39,8 @@ userSchema.methods.validatePassword = function (password) {
 };
 
 //Creating the models 
-let Movie = mongoose.model('Movie', movieSchema);
-let User = mongoose.model('User', userSchema);
+let Movie = mongoose.model('movies', movieSchema);
+let User = mongoose.model('users', userSchema);
 
 //Exports the modals to create/join the database of the shyFlix app
 module.exports.Movie = Movie;
