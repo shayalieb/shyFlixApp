@@ -44,25 +44,26 @@ const cors = require('cors');
 app.use(cors());
 
 
-app.UseCors(builder => builder
-    .allowedOrigins()
-    .allowAnyMethod()
-    .allowAnyHeader()
-    .AllowCredentials());
-[EnableCors('AllowOrigin')]
 
 
-// app.use(cors({
-//     credentials: true,
-//     origin: (origin, callback) => {
-//         if (!origin) return callback(null, true);
-//         if (allowedOrigins.indexOf(origin) === -1) {
-//             let message = 'Due to CORS policy for shyFlixApp access from origin is not allowed! ' + origin;
-//             return callback(new Error(message), false);
-//         }
-//         return callback(null, true);
-//     }
-// }));
+
+app.use(cors({
+    credentials: true,
+    origin: (origin, callback) => {
+        app.UseCors(builder => builder
+            .allowedOrigins()
+            .allowAnyMethod()
+            .allowAnyHeader()
+            .AllowCredentials());
+        [EnableCors('AllowOrigin')]
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            let message = 'Due to CORS policy for shyFlixApp access from origin is not allowed! ' + origin;
+            return callback(new Error(message), false);
+        }
+        return callback(null, true);
+    }
+}));
 
 
 let auth = require('./auth')(app);
