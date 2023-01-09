@@ -40,11 +40,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //CORS Configuration
-const cors = require('cors');
-app.use(cors());
+// const cors = require('cors');
+// app.use(cors());
+app.use(cors())
+app.use('/users', userRoutes)
 
-
-
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', "http://localhost:3000");
+    res.setHeader('Access-Control-Allow-Headers', "*");
+    res.header('Access-Control-Allow-Credentials', true);
+    next();
+});
 
 
 app.use(cors({
