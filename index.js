@@ -50,12 +50,6 @@ app.use(cors());
 app.use(cors({
     credentials: true,
     origin: (origin, callback) => {
-        app.UseCors(builder => builder
-            .allowedOrigins()
-            .allowAnyMethod()
-            .allowAnyHeader()
-            .AllowCredentials());
-        [EnableCors('AllowOrigin')]
         if (!origin) return callback(null, true);
         if (allowedOrigins.indexOf(origin) === -1) {
             let message = 'Due to CORS policy for shyFlixApp access from origin is not allowed! ' + origin;
