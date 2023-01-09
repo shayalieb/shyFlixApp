@@ -43,7 +43,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const cors = require('cors');
 app.use(cors());
 
-
+response_object.header("Access-Control-Allow-Origin", "*");
+response_object.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
 app.use(cors({
     credentials: true,
