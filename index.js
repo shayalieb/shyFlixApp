@@ -16,9 +16,10 @@ const app = express();
 
 
 const mongoose = require('mongoose');
-const Models = require('./models.js');
-const movies = Models.Movie;
-const users = Models.User
+
+const Models = require('./models');
+const movies = models.movie;
+const users = models.user;
 // const dotenv = require('dotenv').config();
 // app.use(dotenv)
 
