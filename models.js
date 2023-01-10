@@ -1,12 +1,12 @@
 const mongoose = require('mongoose'),
     bcrypt = require('bcrypt');
 
-mongoose.set('strictQuery', true)
+// mongoose.set('strictQuery', true)
 
-mongoose.connect(process.env.CONNECTION_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+// mongoose.connect(process.env.CONNECTION_URI, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+// });
 
 let movieSchema = mongoose.Schema({
     Title: { type: String, required: true },
