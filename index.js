@@ -42,20 +42,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //CORS Configuration
-// const cors = require('cors');
-// app.use(cors());
+const cors = require('cors');
+app.use(cors());
 
 
-// app.use(cors({
-//     origin: (origin, callback) => {
-//         if (!origin) return callback(null, true);
-//         if (allowedOrigins.indexOf(origin) === -1) {
-//             let message = 'Due to CORS policy for shyFlixApp access from origin is not allowed! ' + origin;
-//             return callback(new Error(message), false);
-//         }
-//         return callback(null, true);
-//     }
-// }));
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            let message = 'Due to CORS policy for shyFlixApp access from origin is not allowed! ' + origin;
+            return callback(new Error(message), false);
+        }
+        return callback(null, true);
+    }
+}));
 
 
 let auth = require('./auth')(app);
@@ -71,7 +71,7 @@ app.get('/', (req, res) => {
 });
 //Return a list of movies
 app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Movies.find()
+    movies.find()
         .then((movies) => {
             res.status(200).json(movies);
         })
@@ -83,7 +83,7 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) 
 
 //Get movie by title
 app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Movies.findOne({ Title: req.params.Title })
+    movies.findOne({ Title: req.params.Title })
         .then((movie) => {
             res.status(200).json(movie);
         })
@@ -95,7 +95,7 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req
 
 //Get genre my name
 app.get('/movies/genre/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Movies.findOne({ 'Genre.Name': req.params.Name })
+    movies.findOne({ 'Genre.Name': req.params.Name })
         .then((movies) => {
             res.send(movies.Genre);
         })
@@ -107,7 +107,7 @@ app.get('/movies/genre/:Name', passport.authenticate('jwt', { session: false }),
 
 //get director data
 app.get('/movies/Director/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Movies.findOne({ 'Director.Name': req.params.Name })
+    movies.findOne({ 'Director.Name': req.params.Name })
         .then((movies) => {
             res.send(movies.Director);
         })
