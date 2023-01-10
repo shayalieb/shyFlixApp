@@ -17,7 +17,7 @@ const app = express();
 
 const mongoose = require('mongoose');
 const Models = require('./models.js');
-const movie = Models.Movie;
+const movies = Models.Movie;
 const users = Models.User
 // const dotenv = require('dotenv').config();
 // app.use(dotenv)
@@ -132,13 +132,13 @@ app.post('/users', (req, res) => {
             return res.status(422).json({ errors: errors.array() });
         }
     }
-    let hashedPassword = Users.hashPassword(req.body.Password);//hash any password weh registering before storing it
-    Users.findOne({ Username: req.body.Username })
+    let hashedPassword = users.hashPassword(req.body.Password);//hash any password weh registering before storing it
+    users.findOne({ Username: req.body.Username })
         .then((user) => {
             if (user) {
                 return res.status(400).send(req.body.Username + 'This user already exists!');
             } else {
-                Users
+                users
                     .create({
                         Username: req.body.Username,
                         Password: hashedPassword,
@@ -160,7 +160,7 @@ app.post('/users', (req, res) => {
 
 //Add a movie to user favorites
 app.post('/users/:Username/movies/:_id', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Users.findOneAndUpdate({ Username: req.params.Username }, {
+    users.findOneAndUpdate({ Username: req.params.Username }, {
         $push:
             { FavoriteMovies: req.params.MovieID }
     },
@@ -179,7 +179,7 @@ app.post('/users/:Username/movies/:_id', passport.authenticate('jwt', { session:
 
 //Delete a user by username
 app.delete('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Users.findOneAndRemove({ Username: req.params.Username })
+    users.findOneAndRemove({ Username: req.params.Username })
         .then((user) => {
             if (!user) {
                 res.status(400).send(req.params.Username + 'The username was not found');
@@ -195,7 +195,7 @@ app.delete('/users/:Username', passport.authenticate('jwt', { session: false }),
 
 //Update user info
 app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Users.findOneAndUpdate({ Username: req.params.Username }, {
+    users.findOneAndUpdate({ Username: req.params.Username }, {
         $set:
         {
             Username: req.body.Username,
