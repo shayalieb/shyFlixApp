@@ -5,13 +5,13 @@ const bodyParser = require('body-parser');
 const { check, validationResult } = require('express-validator');
 const fs = require('fs');
 const path = require('path')
-//const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 //Adding the database schemas
-const models = require('./models')
+const models = require('./models.js')
 const movies = models.movie;
 const users = models.user;
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
 
 //Adding the use of express
 const app = express();
