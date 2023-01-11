@@ -1,12 +1,10 @@
-const { error } = require('console');
-
 //configuring the passport modules 
 const passport = require('passport'),
   LocalStrategy = require('passport-local').Strategy,
   Models = require('./models.js'),
   passportJWT = require('passport-jwt');
 
-let Users = Models.User,
+let Users = Models.users,
   JWTStrategy = passportJWT.Strategy,
   ExtractJWT = passportJWT.ExtractJwt;
 
