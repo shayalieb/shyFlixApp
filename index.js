@@ -22,8 +22,8 @@ const accessLogStream = fs.createReadStream(path.join(__dirname, 'log.text'), {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// const cors = require('cors');
-// app.use(cors());
+const cors = require('cors');
+app.use(cors());
 
 let auth = require('./auth')(app);
 

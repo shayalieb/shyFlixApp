@@ -1,41 +1,58 @@
 const passport = require('passport'),
   LocalStrategy = require('passport-local').Strategy,
-  Models = require('./models.js'),
+  models = require('./models.js'),
   passportJWT = require('passport-jwt');
 
-let Users = Models.User,
+let users = models.user,
   JWTStrategy = passportJWT.Strategy,
-  ExtractJWT = passportJWT.ExtractJwt;
+  ExtractJWT = passportJWT.Strategy;
 
-passport.use(new LocalStrategy({
-  usernameField: 'Username',
-  passwordField: 'Password'
-}, (username, password, callback) => {
-  console.log(username + ' ' + password);
-  Users.findOne({ Username: username }, (error, user) => {
-    if (error) {
-      console.log(error);
-      return callback(error);
+//Local strategy  
+passport.use(
+  new LocalStrategy(
+    {
+      usernameField: 'Username',
+      passwordField: 'Password',
+    },
+    (username, password, callback) => {
+      users.findOne({ Username: username }, (error, user) => {
+        if (error) {
+          console.log(error);
+          return callback(error);
+        }
+        if (!user) {
+          console.log('Incorrect Username');
+          return callback(null, false, {
+            message: 'Incorrect username or password',
+          });
+        }
+        if (!user.validatePassword(password)) {
+          console.error('Incorrect Password');
+          return callback(null, false, { message: 'Incorrect Password' });
+        }
+        return callback(null, user);
+      });
     }
-    if (!user) {
-      console.log('Incorrect username');
-      return callback(null, false, { message: 'Incorrect username or password' });
+  )
+);
+
+//JWT Strategy
+passport.use(
+  new JWTStrategy(
+    {
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+      secretOrKey: 'your_jwt_secret',
+    },
+    (jwtPayload, callback) => {
+      return users
+        .findById(jwtPayload._id)
+        .then((user) => {
+          return callback(null, user);
+        })
+        .catch((error) => {
+          return callback(error);
+        });
     }
-    console.log('Finished');
-    return callback(null, user);
+  )
+);
 
-  });
-}));
-
-passport.use(new JWTStrategy({
-  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-  secretOrKey: 'your_jwt-secret'
-}, async (jwtPayload, callback) => {
-  try {
-    console.log(jwtPayload)
-    const user = await Users.findById(jwtPayload._id);
-    return callback(null, user);
-  } catch (error) {
-    return callback(error);
-  }
-}));
