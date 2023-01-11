@@ -1,10 +1,21 @@
-//App dependencies
-const express = require('express');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const { check, validationResult } = require('express-validator');
-const fs = require('fs');
-const path = require('path')
+//Temporarily removing this code, and needs to be added back to the "/Movies" endpoint
+// passport.authenticate('jwt', { session: false }),
+
+const
+    express = require('express');
+const { check, validationResult } = require('express-validator')
+morgan = require('morgan');
+bodyParser = require('body-parser');
+uuid = require('uuid');
+fs = require('fs');
+path = require('path')
+http = require('http')
+dotenv = require('dotenv');
+dotenv.config();
+
+
+//Setting the functions
+const app = express();
 const mongoose = require('mongoose');
 
 //Adding the database schemas
@@ -13,8 +24,11 @@ const movies = models.movie;
 const users = models.user;
 //const mongoose = require('mongoose');
 
-//Adding the use of express
-const app = express();
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+let allowedOrgigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com/'];
+//mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });    
+//mongoose.connect('mongodb://localhost:27017/myapp')
+//mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 const accessLogStream = fs.createReadStream(path.join(__dirname, 'log.text'), {
@@ -25,8 +39,27 @@ const accessLogStream = fs.createReadStream(path.join(__dirname, 'log.text'), {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
+//Applying the models
+const Movies = Models.Movie;
+const Users = Models.User;
+
+//CORS Confiuration
 const cors = require('cors');
 app.use(cors());
+
+
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (allowedOrgigins.indexOf(origin) === -1) {
+            let message = 'Due to CORS policy for shyFlixApp access from origin is not allowed! ' + orogin;
+            return callback(new Error(message), false);
+        }
+        return callback(null, true);
+    }
+}));
 
 let auth = require('./auth')(app);
 
@@ -64,25 +97,26 @@ app.get('/documentation', (req, res) => {
 //POST adding a new user
 app.post('/users',
     [
-        check('Username', 'Username has to be minimum 6 characters long').isLength({ min: 5 }),
-        check('username', 'Username must contain alphanumeric characters').isAlphanumeric(),
-        check('Password', 'Password is required to register').not().isEmpty(),
-        check('Email', 'Must contain a valid email address to register').isEmail(),
-    ],
-    (req, res) => {
-        let errors = validationResult(req);
+        check('Username', 'Username is required').isLength({ min: 6 }), //the valication logic
+        check('Username', 'Username contains non-alphanumric characters - not allowed').isAlphanumeric,//validation method
+        check('Password', 'Password is required').not().isEmpty,//password must  be filled in
+        check('Email', 'Invalid email address').isEmail()
+    ], (req, res) => {
+        //check for validation errors
+        let errors = validationresult(req);
         if (!errors.isEmpty()) {
             return res.status(422).json({ errors: errors.array() });
         }
-
-        let hashedPassword = users.hashedPassword(req.body.Password);
-        users.findOne({ Username: req.body.Username })
-            .then((user) => {
-                if (user) {
-                    return res.status(400).send(req.body.Username + 'The username already exists');
-                } else {
-                    users.create({
-                        Username: req.body.username,
+    }
+    let hashedPassword = Users.hashPassword(req.body.Password);//hash any password weh regiterting before storing it
+    Users.findOne({ Username: req.body.Username })
+        .then((user) => {
+            if (user) {
+                return res.status(400).send(req.body.Username + 'This user already exixst!');
+            } else {
+                Users
+                    .create({
+                        Username: req.body.Username,
                         Password: hashedPassword,
                         Email: req.body.Email,
                         Birthday: req.body.Birthday,
@@ -130,14 +164,15 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false }),
     }
 );
 
-//GET return a movie genres
-app.get('/movies/Genre/:Name', passport.authenticate('jwt', { session: false }),
-    (req, res) => {
-        movies.findOne({ 'Genre.Name': req.params.Name })
-            .then((movie) => {
-                res.json(movie.Genre);
-            })
-            .catch((err) => {
+//Add a movie to user favorites
+app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Users.findOneAndUpdate({ Username: req.params.Username }, {
+        $push:
+            { FavoriteMoveis: req.params.MovieID }
+    },
+        { new: true },
+        (err, updateUser) => {
+            if (err) {
                 console.error(err);
                 res.status(500).send('Error: ' + err);
             });
