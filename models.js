@@ -1,7 +1,4 @@
-const mongoose = require('mongoose'),
-    bcrypt = require('bcrypt');
-
-mongoose.set('strictQuery', true)
+const bcrypt = require('bcrypt');
 
 
 
