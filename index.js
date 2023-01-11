@@ -19,8 +19,8 @@ const mongoose = require('mongoose');
 
 //Adding the database schemas
 const models = require('./models.js')
-const movies = models.movie;
-const users = models.user;
+const movies = models.movies;
+const users = models.users;
 //const mongoose = require('mongoose');
 
 mongoose.set("strictQuery", true);
@@ -40,10 +40,6 @@ let allowedOrigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-//Applying the models
-const Movies = models.movies;
-const Users = models.users;
 
 //CORS Configuration
 const cors = require('cors');
