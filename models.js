@@ -41,6 +41,6 @@ let movie = mongoose.model('movies', movieSchema);
 let user = mongoose.model('users', userSchema);
 
 //Exports the modals to create/join the database of the shyFilx app
-module.exports.Movie = movie;
-module.exports.User = user;
+module.exports.movie = movie;
+module.exports.user = user;
 
