@@ -32,9 +32,9 @@ let allowedOrigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com
 //mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
-// const accessLogStream = fs.createReadStream(path.join(__dirname, 'log.text'), {
-//     flags: 'a',
-// });
+const accessLogStream = fs.createReadStream(path.join(__dirname, 'log.text'), {
+    flags: 'a',
+});
 
 //Adding middleware
 app.use(bodyParser.json());
@@ -47,16 +47,16 @@ app.use(cors());
 
 
 
-app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) {
-            let message = 'Due to CORS policy for shyFlixApp access from origin is not allowed! ' + origin;
-            return callback(new Error(message), false);
-        }
-        return callback(null, true);
-    }
-}));
+// app.use(cors({
+//     origin: (origin, callback) => {
+//         if (!origin) return callback(null, true);
+//         if (allowedOrigins.indexOf(origin) === -1) {
+//             let message = 'Due to CORS policy for shyFlixApp access from origin is not allowed! ' + origin;
+//             return callback(new Error(message), false);
+//         }
+//         return callback(null, true);
+//     }
+// }));
 
 let auth = require('./auth')(app);
 
@@ -129,7 +129,7 @@ app.post('/users',
     }
 );
 
-//GET return a list of all movies
+//GET on login return a list of all movies
 app.get('/movies', passport.authenticate('jwt', { session: false }),
     (req, res) => {
         movies.find().then((movies) => {
