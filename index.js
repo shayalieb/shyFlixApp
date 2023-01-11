@@ -32,9 +32,9 @@ let allowedOrigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com
 //mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
-const accessLogStream = fs.createReadStream(path.join(__dirname, 'log.text'), {
-    flags: 'a',
-});
+// const accessLogStream = fs.createReadStream(path.join(__dirname, 'log.text'), {
+//     flags: 'a',
+// });
 
 //Adding middleware
 app.use(bodyParser.json());
@@ -72,7 +72,7 @@ mongoose.connect(process.env.CONNECTION_URI, {
 });
 // mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
 
-app.use(morgan('combined', { stream: accessLogStream }));
+app.use(morgan('combined'));
 
 
 app.use(express.static('public'));
