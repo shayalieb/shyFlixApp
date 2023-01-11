@@ -40,8 +40,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //Applying the models
-const Movies = models.Movie;
-const Users = models.User;
+const Movie = models.movie;
+const Users = models.user;
 
 //CORS Configuration
 const cors = require('cors');
@@ -108,12 +108,12 @@ app.post('/users',
         }
 
         let hashedPassword = users.hashPassword(req.body.Password);//hash any password weh registering before storing it
-        Users.findOne({ Username: req.body.Username })
+        users.findOne({ Username: req.body.Username })
             .then((user) => {
                 if (user) {
                     return res.status(400).send(req.body.Username + ' user already exist!');
                 } else {
-                    Users
+                    users
                         .create({
                             Username: req.body.Username,
                             Password: hashedPassword,
