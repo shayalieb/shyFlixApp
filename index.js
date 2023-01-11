@@ -22,8 +22,8 @@ const accessLogStream = fs.createReadStream(path.join(__dirname, 'log.text'), {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const cors = require('cors');
-app.use(cors());
+// const cors = require('cors');
+// app.use(cors());
 
 let auth = require('./auth')(app);
 
@@ -244,28 +244,28 @@ app.delete('/users/:Username/movies/:_id', passport.authenticate('jwt', { sessio
         ).then((user) => {
             res.status(200).json(user);
         })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send('Error: ' + err);
-        });
+            .catch((err) => {
+                console.error(err);
+                res.status(500).send('Error: ' + err);
+            });
     }
 );
 
 //DELETE remove a user account
 app.delete('/users/:Username', passport.authenticate('jwt', { session: false }),
     (req, res) => {
-        users.findByIdAndRemove({ Username: req.params.Username})
-        .them((user) => {
-            if(!user) {
-                res.status(400).send(req.params.Username + 'was not found');
-            } else {
-                res.status(200).send(req.params.Username + 'has been deleted');
-            }
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send('Error: ' + err);
-        });
+        users.findByIdAndRemove({ Username: req.params.Username })
+            .them((user) => {
+                if (!user) {
+                    res.status(400).send(req.params.Username + 'was not found');
+                } else {
+                    res.status(200).send(req.params.Username + 'has been deleted');
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+                res.status(500).send('Error: ' + err);
+            });
     }
 );
 
