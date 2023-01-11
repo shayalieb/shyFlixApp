@@ -278,7 +278,6 @@ app.delete('/users/:Username', passport.authenticate('jwt', { session: false }),
 );
 
 //Listener
-const port = process.env.PORT || 8080;
-app.listen(port, '0,0,0,0', () => {
-    console.log('listening on port ' + port)
-})
+app.listen(process.env.PORT, () => {
+    console.log(`Running on ${process.env.HOST}:${process.env.PORT}`);
+});
