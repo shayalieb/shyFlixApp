@@ -31,6 +31,12 @@ const passport = require('passport');
 
 app.use(morgan('combined', { stream: accessLogStream }));
 
+mongoose.connect(process.env.CONNECTION_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
+// mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
+
 app.use(express.static('public'));
 
 app.use((err, req, res, next) => {
@@ -270,7 +276,7 @@ app.delete('/users/:Username', passport.authenticate('jwt', { session: false }),
 );
 
 //Listener
-app.listen(process.env.PORT, () => {
-    console.log`App is running on ${process.env.HOST}:${process.end.PORT}`
-});
-
+const port = process.env.PORT || 8080;
+app.listen(port, '0,0,0,0', () => {
+    console.log('listening on port ' + port)
+})
