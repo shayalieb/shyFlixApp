@@ -43,15 +43,14 @@ passport.use(
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
       secretOrKey: 'your_jwt_secret',
     },
-    (jwtPayload, callback) => {
-      return users
-        .findById(jwtPayload._id)
-        .then((user) => {
-          return callback(null, user);
-        })
-        .catch((error) => {
-          return callback(error);
-        });
+    async (jwtPayload, callback) => {
+      try {
+        const user = await users
+          .findById(jwtPayload._id);
+        return callback(null, user);
+      } catch (error) {
+        return callback(error);
+      }
     }
   )
 );
