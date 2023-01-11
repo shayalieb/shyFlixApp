@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const { check, validationResult } = require('express-validator');
 const fs = require('fs');
 const path = require('path')
+const mongoose = require('mongoose');
 
 //Adding the database schemas
 const models = require('./models')
@@ -31,13 +32,14 @@ let auth = require('./auth')(app);
 
 const passport = require('passport');
 
-app.use(morgan('combined', { stream: accessLogStream }));
-
 mongoose.connect(process.env.CONNECTION_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
 // mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
+
+app.use(morgan('combined', { stream: accessLogStream }));
+
 
 app.use(express.static('public'));
 
