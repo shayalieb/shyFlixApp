@@ -42,8 +42,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //Applying the models
-const Movie = models.movie;
-const Users = models.user;
+const Movies = models.movies;
+const Users = models.users;
 
 //CORS Configuration
 const cors = require('cors');

@@ -26,7 +26,7 @@ let userSchema = mongoose.Schema({
     Password: { type: String, required: true },
     Email: { type: String, required: true },
     DOB: Date,
-    FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }]
+    FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'movies' }]
 });
 
 userSchema.static.hashedPassword = (password) => {
@@ -41,6 +41,6 @@ let movie = mongoose.model('movies', movieSchema);
 let user = mongoose.model('users', userSchema);
 
 //Exports the modals to create/join the database of the shyFilx app
-module.exports.movie = movie;
-module.exports.user = user;
+module.exports.movies = movie;
+module.exports.users = user;
 
