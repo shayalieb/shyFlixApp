@@ -15,7 +15,7 @@ const mongoose = require('mongoose');
 
 //Adding the use of express
 const app = express();
-const mongoose = require('mongoose');
+
 
 const accessLogStream = fs.createReadStream(path.join(__dirname, 'log.text'), {
     flags: 'a',
