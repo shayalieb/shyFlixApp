@@ -107,7 +107,7 @@ app.post('/users',
             return res.status(422).json({ errors: errors.array() });
         }
 
-        let hashedPassword = Users.hashPassword(req.body.Password);//hash any password weh registering before storing it
+        let hashedPassword = users.hashPassword(req.body.Password);//hash any password weh registering before storing it
         Users.findOne({ Username: req.body.Username })
             .then((user) => {
                 if (user) {
