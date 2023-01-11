@@ -37,10 +37,10 @@ userSchema.methods.validatePassword = function (password) {
     return bcrypt.compareSync(password.this.Password);
 };
 
-let movie = mongoose.model('movies', movieSchema);
-let user = mongoose.model('users', userSchema);
+let Movie = mongoose.model('Movie', movieSchema);
+let User = mongoose.model('User', userSchema);
 
 //Exports the modals to create/join the database of the shyFilx app
-module.exports.movies = movie;
-module.exports.users = user;
+module.exports.Movie = Movie;
+module.exports.User = User;
 
