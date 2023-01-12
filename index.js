@@ -47,6 +47,9 @@ app.get('/', (req, res) => {
         <p>Check out the documentation <a href="https://shyflixapp.herokuapp.com/documentation">Click Here</a>`
     );
 });
+app.get('/documentation', (req, res) => {
+    res.status(200).sendFile('/public/documentation.html', { root: __dirname });
+})
 
 //POST add a new user
 app.post('/users',
