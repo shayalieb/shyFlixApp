@@ -170,7 +170,7 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false }),
     });
 
 //PUT update a username
-app.put('/users', passport.authenticate('jwt', { session: false }),
+app.put('/users/:Username', passport.authenticate('jwt', { session: false }),
     [
         check('Username', 'Username must be at least 6 characters long').isLength({ min: 5 }),
         check('Username', 'Username must contain alphanumeric characters only!').isAlphanumeric(),
