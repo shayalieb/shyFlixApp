@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
+const salt = bcrypt.genSaltSync(10);
 //Configuring the movies database schema
 //Data types are: String and Boolean
 let movieSchema = mongoose.Schema({
@@ -29,8 +30,8 @@ let userSchema = mongoose.Schema({
     FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'movies' }]
 });
 
-userSchema.static.hashedPassword = (password) => {
-    return bcrypt.hashSync(password, 10);
+userSchema.statics.hashPassword = (password) => {
+    return bcrypt.hashSync(password, salt);
 };
 
 userSchema.methods.validatePassword = function (password) {

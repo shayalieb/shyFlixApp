@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const uuid = require('uuid');
 const { check, validationResult } = require('express-validator');
+var bcrypt = require('bcrypt');
 
 const morgan = require('morgan');
 const app = express();
@@ -25,15 +26,15 @@ app.use(cors());
 //Adding the authorization method for login
 let auth = require('./auth')(app);
 const passport = require('passport');
-const { request } = require('http');
-const { session } = require('passport');
+const http = require('http');
 require('./passport')
 
 //Mongoose URI connection
 mongoose.set('strictQuery', true);
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-// let allowedOrigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com', 'http://localhost:1234'];
-//mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });    
+let allowedOrigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com', 'http://localhost:1234'];
+//mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority',
+// { useNewUrlParser: true, useUnifiedTopology: true });
 
 //Log server requests
 app.use(morgan('common'));
@@ -65,7 +66,7 @@ app.post('/users',
             return res.status(422).json({ errors: errors.array() });
         }
         //Hash passwords that are stored on the server
-        let hashedPassword = Users.hashedPassword(req.body.Password);
+        let hashedPassword = Users.hashPassword(req.body.Password);
         Users.findOne({ Username: req.body.Username })
             .then((user) => {
                 if (user) {
@@ -169,27 +170,22 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false }),
     });
 
 //PUT update a username
-app.put(
-    '/users/:Username',
+app.put('/users/:Username', passport.authenticate('jwt', { session: false }),
     [
-        check('Username', 'Username is required').isLength({ min: 5 }),
-        check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+        check('Username', 'Username must be at least 6 characters long').isLength({ min: 5 }),
+        check('Username', 'Username must contain alphanumeric characters only!').isAlphanumeric(),
         check('Password', 'Password is required').not().isEmpty(),
-        check('Email', 'Email does not appear to be valid').isEmail(),
-        passport.authenticate('jwt', { session: false }),
+        check('Email', 'Must contain a valid email address').isEmail(),
     ],
     (req, res) => {
-        // check validation object for errors
         let errors = validationResult(req);
-
         if (!errors.isEmpty()) {
             return res.status(422).json({ errors: errors.array() });
         }
 
-        let hashedPassword = Users.hashedPassword(req.body.Password);
-
+        let hashedPassword = Users.hashPassword(req.body.Password);
         Users.findOneAndUpdate(
-            { Username: req.params.Username },
+            { Username: req.body.Username },
             {
                 $set: {
                     Username: req.body.Username,
@@ -198,7 +194,7 @@ app.put(
                     Birthday: req.body.Birthday,
                 },
             },
-            { new: true }, //Update is returned
+            { new: true },
             (err, updatedUser) => {
                 if (err) {
                     console.error(err);
@@ -206,8 +202,11 @@ app.put(
                 } else {
                     res.json(updatedUser);
                 }
-            });
-    });
+            }
+        );
+    }
+);
+
 
 //POST add a movie to FavoriteMovies list
 app.post('/users/:Username/movies/:_id', passport.authenticate('jwt', { session: false }),
