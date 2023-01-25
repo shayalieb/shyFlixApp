@@ -14,6 +14,8 @@ const Models = require('./models.js')
 const Movies = Models.Movie;
 const Users = Models.User;
 
+
+
 //Add functions
 app.use(express.json());
 app.use(bodyParser.json());
@@ -26,18 +28,19 @@ app.use(cors());
 //Adding the authorization method for login
 let auth = require('./auth')(app);
 const passport = require('passport');
-const http = require('http');
 require('./passport')
 
 //Mongoose URI connection
 mongoose.set('strictQuery', true);
-mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+//mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 let allowedOrigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com', 'http://localhost:1234'];
-//mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority',
-// { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority',
+    { useNewUrlParser: true, useUnifiedTopology: true });
+//const id = mongoose.Types.ObjectId(req.params.id.trim());
 
 //Log server requests
-app.use(morgan('common'));
+// const accessLogStream = fs.createWroteStream(path.join(__dirname, 'log.txt'), { flags: 'a' })
+// app.use(morgan('common', { stream: accessLogStream, }));
 
 //CRUD operations
 
@@ -172,9 +175,9 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false }),
 //PUT update a username
 app.put('/users/:Username', passport.authenticate('jwt', { session: false }),
     [
-        check('Username', 'Username must be at least 6 characters long').isLength({ min: 5 }),
+        check('Username', 'Username must be at least 6 characters long').isLength({ min: 6 }),
         check('Username', 'Username must contain alphanumeric characters only!').isAlphanumeric(),
-        check('Password', 'Password is required').not().isEmpty(),
+        check('Password', 'Password must be at least 8 characters to update').isLength({ min: 8 }),
         check('Email', 'Must contain a valid email address').isEmail(),
     ],
     (req, res) => {
@@ -182,10 +185,9 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }),
         if (!errors.isEmpty()) {
             return res.status(422).json({ errors: errors.array() });
         }
-
         let hashedPassword = Users.hashPassword(req.body.Password);
         Users.findOneAndUpdate(
-            { Username: req.body.Username },
+            { Username: req.params.Username },
             {
                 $set: {
                     Username: req.body.Username,
@@ -195,12 +197,12 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }),
                 },
             },
             { new: true },
-            (err, updatedUser) => {
+            (err, updateUser) => {
                 if (err) {
                     console.error(err);
                     res.status(500).send('Error: ' + err);
                 } else {
-                    res.json(updatedUser);
+                    res.json(updateUser);
                 }
             }
         );
@@ -215,12 +217,12 @@ app.post('/users/:Username/movies/:_id', passport.authenticate('jwt', { session:
             $push: { FavoriteMovies: req.params._id }
         },
             { new: true },
-            (err, updatedUser) => {
+            (err, updateUser) => {
                 if (err) {
                     console.error(err);
                     res.status(500).send('Error: ' + err);
                 } else {
-                    res.json(updatedUser);
+                    res.json(updateUser);
                 }
             });
     });
@@ -232,12 +234,12 @@ app.delete('/users/:Username/movies/:_id', passport.authenticate('jwt', { sessio
             $pull: { FavoriteMovies: req.params._id }
         },
             { new: true },
-            (err, updatedUser) => {
+            (err, updateUser) => {
                 if (err) {
                     console.error(err);
                     res.status(500).send('Error: ' + err);
                 } else {
-                    res.json(updatedUser);
+                    res.json(updateUser);
                 }
             });
     });
