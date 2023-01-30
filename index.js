@@ -21,10 +21,6 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//Adding cors
-const cors = require('cors');
-app.use(cors());
-
 //Adding the authorization method for login
 let auth = require('./auth')(app);
 const passport = require('passport');
@@ -40,6 +36,7 @@ mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnified
 const cors = require('cors');
 let allowedOrigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com', 'http://localhost:1234', 'https://shyflixapp.netlify.app'];
 
+//Adding cors
 app.use(cors({
     origin: (origin, callback) => {
         if (!origin) return callback(null, true);
