@@ -32,15 +32,24 @@ require('./passport')
 
 //Mongoose URI connection
 mongoose.set('strictQuery', true);
-//mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-let allowedOrigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com', 'http://localhost:1234'];
-mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority',
-    { useNewUrlParser: true, useUnifiedTopology: true });
-//const id = mongoose.Types.ObjectId(req.params.id.trim());
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority',
+//     { useNewUrlParser: true, useUnifiedTopology: true });
 
-//Log server requests
-// const accessLogStream = fs.createWroteStream(path.join(__dirname, 'log.txt'), { flags: 'a' })
-// app.use(morgan('common', { stream: accessLogStream, }));
+//Adding cors
+const cors = require('cors');
+let allowedOrigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com', 'http://localhost:1234', 'https://shyflixapp.netlify.app'];
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {//If the origin is not found on the list
+            let message = 'Due to CORS policy, you cannot access this application' + origin;
+            return callback(new Error(message), false);
+        }
+        return callback(null, true);
+    }
+}));
 
 //CRUD operations
 
