@@ -28,6 +28,8 @@ app.use(cors());
 //Adding the authorization method for login
 let auth = require('./auth')(app);
 const passport = require('passport');
+const http = require('http');
+const { session } = require('passport');
 require('./passport')
 
 //Mongoose URI connection
@@ -106,16 +108,16 @@ app.post('/users',
     });
 
 //GET list of of movies 
-app.get('/movies', passport.authenticate('jwt', { session: false }),
-    function (req, res) {
-        Movies.find().then((movies) => {
-            res.status(201).json(movies);
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Movies.find()
+        .then((movies) => {
+            res.status(200).json(movies)
         })
-            .catch((err) => {
-                console.error(err);
-                res.status(500).send('Error: ' + err)
-            });
-    });
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ', + err)
+        });
+});
 
 //GET list of users
 app.get('/users', passport.authenticate('jwt', { session: false }),
