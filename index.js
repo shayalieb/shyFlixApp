@@ -28,8 +28,6 @@ app.use(cors());
 //Adding the authorization method for login
 let auth = require('./auth')(app);
 const passport = require('passport');
-
-const passport = require('passport');
 require('./passport')
 
 app.use(express.static('public'));
