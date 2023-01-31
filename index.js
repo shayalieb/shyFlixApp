@@ -43,7 +43,8 @@ let allowedOrigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com
 
 //Adding cors
 app.use(cors({
-    origin: 'https://shyflixapp.herokuapp.com'
+    origin: 'https://shyflixapp.herokuapp.com',
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
 // app.use(cors({
 //     origin: (origin, callback) => {
