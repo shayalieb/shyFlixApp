@@ -38,20 +38,20 @@ mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnified
 
 //CORS for access control
 const cors = require('cors');
-app.use(cors());
-// let allowedOrigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com', 'http://localhost:1234', 'https://shyflixapp.netlify.app'];
+// app.use(cors());
+let allowedOrigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com', 'http://localhost:1234', 'https://shyflixapp.netlify.app'];
 
-// //Adding cors
-// app.use(cors({
-//     origin: (origin, callback) => {
-//         if (!origin) return callback(null, true);
-//         if (allowedOrigins.indexOf(origin) === -1) {//if the origin is not found in allowed origins
-//             let message = 'Due to cors policy you cannot connect to this application ' + origin;
-//             return callback(new Error(message), false);
-//         }
-//         return callback(null, true);
-//     }
-// }));
+//Adding cors
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {//if the origin is not found in allowed origins
+            let message = 'Due to cors policy you cannot connect to this application ' + origin;
+            return callback(new Error(message), false);
+        }
+        return callback(null, true);
+    }
+}));
 
 
 
