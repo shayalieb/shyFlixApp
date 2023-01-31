@@ -3,8 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const uuid = require('uuid');
 const { check, validationResult } = require('express-validator');
-const nodemon = require('nodemon')
-const http = require('http')
+
 
 const morgan = require('morgan');
 const app = express();
@@ -19,44 +18,45 @@ const Users = Models.User;
 
 //Add functions
 app.use(express.json());
+app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan('common'))
 
 //Adding the authorization method for login
 let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport')
 
-app.use(express.static('public'));
-app.use(morgan('common'))
+
 
 //Mongoose URI connection
-mongoose.set('strictQuery', true);
-mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+//mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 //THE OPEN MONGOOSE URI STRING
-// mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority',
-//     { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority',
+    { useNewUrlParser: true, useUnifiedTopology: true });
 
 //CORS for access control
 
-// app.use(cors());
-//let allowedOrigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com', 'http://localhost:1234', 'https://shyflixapp.netlify.app'];
+//app.use(cors());
+let allowedOrigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com', 'http://localhost:1234', 'https://shyflixapp.netlify.app'];
 
 //Adding cors
+const cors = require('cors')
 // app.use(cors({
 //     origin: 'https://shyflixapp.herokuapp.com',
 //     methods: ['GET', 'POST', 'PUT', 'DELETE']
 // }));
-// app.use(cors({
-//     origin: (origin, callback) => {
-//         if (!origin) return callback(null, true);
-//         if (allowedOrigins.indexOf(origin) === -1) {//if the origin is not found in allowed origins
-//             let message = 'Due to cors policy you cannot connect to this application ' + origin;
-//             return callback(new Error(message), false);
-//         }
-//         return callback(null, true);
-//     }
-// }));
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {//if the origin is not found in allowed origins
+            let message = 'Due to cors policy you cannot connect to this application ' + origin;
+            return callback(new Error(message), false);
+        }
+        return callback(null, true);
+    }
+}));
 
 
 
