@@ -31,11 +31,11 @@ app.use(express.static('public'));
 app.use(morgan('common'))
 
 //Mongoose URI connection
-//mongoose.set('strictQuery', true);
-//mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.set('strictQuery', true);
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 //THE OPEN MONGOOSE URI STRING
-mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority',
-    { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority',
+//     { useNewUrlParser: true, useUnifiedTopology: true });
 
 //CORS for access control
 
