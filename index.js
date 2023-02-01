@@ -23,10 +23,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('common'))
 
-//Adding the authorization method for login
-let auth = require('./auth')(app);
-const passport = require('passport');
-require('./passport')
 
 
 
@@ -58,6 +54,12 @@ app.use(cors({
         return callback(null, true);
     }
 }));
+
+//Adding the authorization method for login
+let auth = require('./auth')(app);
+const passport = require('passport');
+require('./passport')
+
 
 
 
