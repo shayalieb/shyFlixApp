@@ -35,7 +35,8 @@ require('./passport')
 //THE OPEN MONGOOSE URI STRING
 mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority',
     { useNewUrlParser: true, useUnifiedTopology: true });
-
+    
+mongoose.set('strictQuery', true);
 //CORS for access control
 
 //app.use(cors());
