@@ -27,10 +27,10 @@ app.use(morgan('common'))
 
 
 //Mongoose URI connection
-//mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 //THE OPEN MONGOOSE URI STRING
-mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority',
-    { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority',
+//     { useNewUrlParser: true, useUnifiedTopology: true });
 
 mongoose.set('strictQuery', true);
 //CORS for access control
@@ -40,10 +40,7 @@ let allowedOrigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com
 
 //Adding cors
 const cors = require('cors')
-// app.use(cors({
-//     origin: 'https://shyflixapp.herokuapp.com',
-//     methods: ['GET', 'POST', 'PUT', 'DELETE']
-// }));
+
 app.use(cors({
     origin: (origin, callback) => {
         if (!origin) return callback(null, true);
