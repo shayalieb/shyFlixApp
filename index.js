@@ -21,22 +21,30 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+// parse various different custom JSON types as JSON
+app.use(bodyParser.json({ type: 'application/*+json' }))
+
+// parse some custom thing into a Buffer
+app.use(bodyParser.raw({ type: 'application/vnd.custom-type' }))
+
+// parse an HTML body into a string
+app.use(bodyParser.text({ type: 'text/html' }))
 app.use(morgan('common'))
 
 
 
 
 //Mongoose URI connection
-//mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 //THE OPEN MONGOOSE URI STRING
-mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority',
-    { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect('mongodb+srv://shayalieberman:shaya1234@shyflixdb.hhh4rbo.mongodb.net/shyflixdb?retryWrites=true&w=majority',
+//     { useNewUrlParser: true, useUnifiedTopology: true });
 
 mongoose.set('strictQuery', true);
 //CORS for access control
 
 //app.use(cors());
-let allowedOrigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com', 'http://localhost:1234', 'https://shyflixapp.netlify.app'];
+let allowedOrigins = ['http://localhost:8080', 'https://shyflixapp.herokuapp.com', 'http://localhost:1234', 'https://shyflixapp.netlify.app', 'http://localhost:4200/'];
 
 //Adding cors
 const cors = require('cors')
