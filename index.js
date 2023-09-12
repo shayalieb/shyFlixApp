@@ -71,7 +71,7 @@ require('./passport')
 //CRUD operations
 
 //GET default home page
-app.get('/', (req, res) => {
+app.get('/welcome', (req, res) => {
     res.status(200).send(
         `<h1>Welcome the the shyFlix Movie App</h1>
         <p>Check out the documentation <a href="https://shyflixapp.herokuapp.com/documentation">Click Here</a>`
