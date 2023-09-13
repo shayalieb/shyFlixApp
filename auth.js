@@ -3,7 +3,13 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 require('./passport');
 
-//Configure the web token 
+
+/**
+ * Configure the web token 
+ * // This line generates a JSON Web Token (JWT) using the user's information and the secret key
+ * @param {*} user 
+ * @returns a token to be used by the user
+ */
 let generateJWTToken = (user) => {
   return jwt.sign(user, jwtSecret, {
     subject: user.Username,
@@ -14,7 +20,12 @@ let generateJWTToken = (user) => {
 
 
 
-//POST on login authentication
+
+/**
+ * POST on login authentication
+ * Initialize Express middleware to parse incoming request bodies in a middleware before your handlers
+ * @param {*} router 
+ */
 module.exports = (router) => {
   router.post('/login', (req, res) => {
     passport.authenticate('local', { session: false }, (error, user, info) => {
