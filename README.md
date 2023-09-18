@@ -1,7 +1,15 @@
 # shyFlixApp
 
-shyFlix app server side where the API is configured. 
-The server is a flat database that is hosted MongoDB 
+This API is the power behind shyFlix App (React) and myFlix App (Angular)
+ShyFlix app is the server side that allows data to flow between the user and server in a secure way. 
+This app is hosted on Heroku https://shyflixapp.herokuapp.com/documentation
+
+Test the API locally - npm start
+Commit to the Github repo: 
+1. git add. 2. git commit -m "commit message". 3. git push heroku main.  
+
+Deploy to heroku one data is committed to the repo - git push heroku main
+
 
 ## Technologies 
 
